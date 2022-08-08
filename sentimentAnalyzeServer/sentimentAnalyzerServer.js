@@ -6,37 +6,10 @@ const dotenv=require('dotenv');
 dotenv.config();
 
 app.use(express.static('client'))
-
+ 
 const cors_app = require('cors');
 app.use(cors_app());
-
-app.get("/",(req,res)=>{
-    res.render('index.html');
-  });
-
-app.get("/url/emotion", (req,res) => {
-     analyzeEmotionUrl(req.query.url,res);
  
-});
-
-app.get("/url/sentiment", (req,res) => {
-    analyzeSentimentUrl(req.query.url,res);
-});
-
-app.get("/text/emotion", (req,res) => {
- 
-  analyzeEmotionText(req.query.text,res);
-});
-
-app.get("/text/sentiment", (req,res) => {
- 
-    analyzeSentimentText(req.query.text,res);
-});
-
-let server = app.listen(8080, () => {
-    console.log('Listening', server.address().port)
-})
-
 function getNLUInstance() {
 /*Type the code to create the NLU instance and return it.
     You can refer to the image in the instructions document
@@ -63,6 +36,30 @@ serviceUrl: api_url,
 return naturalLanguageUnderstanding;
 
 }
+app.get("/",(req,res)=>{
+  res.render('index.html');
+  });
+
+app.get("/url/emotion", (req,res) => {
+     analyzeEmotionUrl(req.query.url,res);
+ 
+});
+
+app.get("/url/sentiment", (req,res) => {
+    analyzeSentimentUrl(req.query.url,res);
+});
+
+app.get("/text/emotion", (req,res) => {
+ 
+  analyzeEmotionText(req.query.text,res);
+});
+
+app.get("/text/sentiment", (req,res) => {
+ 
+    analyzeSentimentText(req.query.text,res);
+});
+
+
 function analyzeEmotionUrl(url,res){
     const naturalLanguageUnderstanding= getNLUInstance();
     const analyzeParams = {
@@ -93,7 +90,7 @@ function analyzeEmotionText(sampleText,res){
 };
 naturalLanguageUnderstanding.analyze(analyzeParams)
   .then(analysisResults => {
-    console.log(JSON.stringify(analysisResults, null, 2));
+   
    // return analysisResults.result.emotion.document.emotion;
    res.send(analysisResults.result.emotion.document.emotion);
   })
@@ -122,7 +119,7 @@ function analyzeSentimentText(sampleText,res){
       .catch(err => {
           
         console.log('error:', err);
-         res.send("nutral");
+        
       });
 
 }
@@ -148,3 +145,6 @@ function analyzeSentimentUrl(url,res){
       });
 
 }
+let server = app.listen(8080, () => {
+    console.log('Listening', server.address().port)
+})
